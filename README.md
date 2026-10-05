@@ -55,7 +55,9 @@ The leaderboard uses `--per-tier 40 --seed 7` (120 addresses).
   the same USPS regional sorting center.
 - A reply with no 5-digit number counts as wrong. This includes refusals and models that run out of tokens while
   reasoning.
-- If any request fails (API error, out of credits), the run is listed as **incomplete** and left unranked.
+- If any request in a run fails (API error, out of credits), that run is left off the leaderboard. It is still
+  recorded in `results/summary.csv`. Gemini 3.1 Pro, DeepSeek V4 Pro, Mistral Medium 3.5 and Kimi K3 are missing for
+  this reason: the account ran out of credits partway through their runs.
 
 **Outputs** (`report.py`). Every run is written to disk:
 - `results/summary.csv` is the permanent record, with one row per model per run.

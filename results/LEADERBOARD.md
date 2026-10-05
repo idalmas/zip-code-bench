@@ -1,7 +1,7 @@
 # ZIP code bench leaderboard
 
 Exact 5-digit ZIP accuracy. Tiers: **easy** = town has 1 ZIP, **medium** = city has 2-9 ZIPs, **hard** = city has 10+ ZIPs.
-Generated from `summary.csv`; latest run per model in each sample.
+Generated from `summary.csv`; latest run per model in each sample. Runs with failed requests are left out.
 
 ## 40 per tier, seed 7
 
@@ -22,10 +22,6 @@ Generated from `summary.csv`; latest run per model in each sample.
 | 13 | openai/gpt-5.4-nano | **54.2%** | 72.5% | 70.0% | 20.0% | 90.8% | $0.0024 | [log](runs/20261004-140950_openai_gpt-5.4-nano_default_n120_s7.jsonl) |
 | 14 | qwen/qwen3.8-flash | **50.0%** | 72.5% | 60.0% | 17.5% | 93.3% | $0.0959 | [log](runs/20261004-141646_qwen_qwen3.8-flash_default_n120_s7.jsonl) |
 | 15 | google/gemma-4-31b-it | **20.8%** | 17.5% | 35.0% | 10.0% | 81.7% | $0.0033 | [log](runs/20261004-141009_google_gemma-4-31b-it_default_n120_s7.jsonl) |
-| – (incomplete: 40 errors) | deepseek/deepseek-v4-pro-0813 | **51.7%** | 82.5% | 60.0% | 12.5% | 65.0% | $0.1724 | [log](runs/20261004-151325_deepseek_deepseek-v4-pro-0813_default_n120_s7.jsonl) |
-| – (incomplete: 77 errors) | google/gemini-3.1-pro-preview | **32.5%** | 70.0% | 5.0% | 22.5% | 35.0% | $0.3265 | [log](runs/20261004-145418_google_gemini-3.1-pro-preview_default_n120_s7.jsonl) |
-| – (incomplete: 86 errors) | mistralai/mistral-medium-3-5 | **20.8%** | 37.5% | 17.5% | 7.5% | 28.3% | $0.0053 | [log](runs/20261004-151327_mistralai_mistral-medium-3-5_default_n120_s7.jsonl) |
-| – (incomplete: 113 errors) | moonshotai/kimi-k3 | **5.0%** | 15.0% | 0.0% | 0.0% | 5.8% | $0.0366 | [log](runs/20261004-151400_moonshotai_kimi-k3_default_n120_s7.jsonl) |
 
 ## 40 random, seed 42
 

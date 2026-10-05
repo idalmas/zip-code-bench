@@ -79,13 +79,12 @@ def boards() -> list[tuple[str, list[dict]]]:
     """One board per sample; within it, the latest run per (model, effort), ranked."""
     groups: dict[str, dict[tuple, dict]] = {}
     for r in read_summary():
-        if int(r["n"]) < 10:  # smoke tests
+        if int(r["n"]) < 10 or int(r["errors"]) > 0:  # smoke tests, and runs with failed requests
             continue
         groups.setdefault(r["sample"], {})[(r["model"], r["effort"])] = r  # later rows win
     out = []
     for label, latest in groups.items():
-        # Runs with API errors (e.g. out of credits) aren't comparable: list them last, unranked.
-        rows = sorted(latest.values(), key=lambda r: (int(r["errors"]) > 0, -float(r["exact_pct"]), -float(r["prefix3_pct"])))
+        rows = sorted(latest.values(), key=lambda r: (-float(r["exact_pct"]), -float(r["prefix3_pct"])))
         out.append((label, rows))
     # Tiered boards first, then most recent.
     out.sort(key=lambda g: ("per tier" not in g[0], -max(datetime.fromisoformat(r["timestamp"]).timestamp() for r in g[1])))
@@ -99,13 +98,11 @@ def pct(v: str) -> str:
 def write_markdown(groups) -> None:
     lines = ["# ZIP code bench leaderboard", "",
              "Exact 5-digit ZIP accuracy. Tiers: " + ", ".join(f"**{t}** = {h}" for t, h in TIER_HELP.items()) + ".",
-             "Generated from `summary.csv`; latest run per model in each sample.", ""]
+             "Generated from `summary.csv`; latest run per model in each sample. Runs with failed requests are left out.", ""]
     for label, rows in groups:
         lines += [f"## {label}", "", "| # | model | exact | easy | medium | hard | first 3 digits | cost | details |",
                   "|---|---|---|---|---|---|---|---|---|"]
         for i, r in enumerate(rows, 1):
-            if int(r["errors"]):
-                i = f"– (incomplete: {r['errors']} errors)"
             name = Path(r["details"]).name
             lines.append(f"| {i} | {r['model']}{'' if r['effort'] == 'default' else ' (' + r['effort'] + ')'} "
                          f"| **{pct(r['exact_pct'])}** | {pct(r['easy_pct'])} | {pct(r['medium_pct'])} | {pct(r['hard_pct'])} "
@@ -158,8 +155,6 @@ td.score { font-weight: 500; color: var(--accent); }
 .bar { display: block; height: 3px; margin-top: 4px; background: var(--bar); border-radius: 2px; }
 .bar i { display: block; height: 100%; background: var(--accent); border-radius: 2px; }
 footer { color: var(--muted); font-size: 13px; }
-tr.dim td { color: var(--muted); }
-.note { display: block; font-size: 12px; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -178,11 +173,8 @@ def write_site(groups) -> None:
                   f"<thead><tr><th>#</th><th>Model</th><th>Exact ZIP</th>{tier_th}<th>First 3<small>digits right</small></th><th>Cost</th></tr></thead><tbody>"]
         for i, r in enumerate(rows, 1):
             name = r["model"] + ("" if r["effort"] == "default" else f" ({r['effort']})")
-            incomplete = int(r["errors"]) > 0
-            rank = "–" if incomplete else i
-            note = f' <span class="note">incomplete: {r["errors"]} of {r["n"]} requests failed</span>' if incomplete else ""
             parts.append(
-                f'<tr{" class=dim" if incomplete else ""}><td class="rank">{rank}</td><td class="model">{e(name)}{note}</td>'
+                f'<tr><td class="rank">{i}</td><td class="model">{e(name)}</td>'
                 f'<td class="score">{pct(r["exact_pct"])}<span class="bar"><i style="width:{float(r["exact_pct"])}%"></i></span></td>'
                 + "".join(f"<td>{pct(r[f'{t}_pct'])}</td>" for t in TIERS)
                 + f"<td>{pct(r['prefix3_pct'])}</td><td>${float(r['cost_usd']):.3f}</td></tr>")
