@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZIP Code Bench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* One narrow column: heading, a line of context, then one plain table per sample. */
+:root {
+  --bg: #f5f7fa; --surface: #ffffff; --fg: #18202b; --muted: #5d6b7c; --rule: #d9e0e8;
+  --accent: #24548f; --bar: #c9d8ea;
+  --sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11161d; --surface: #171e27; --fg: #e4e9ef; --muted: #93a1b2; --rule: #2a3440;
+  --accent: #82b0e6; --bar: #2b4565; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11161d; --surface: #171e27; --fg: #e4e9ef; --muted: #93a1b2; --rule: #2a3440;
+  --accent: #82b0e6; --bar: #2b4565; color-scheme: dark }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+main { max-width: 880px; margin: 0 auto; padding-inline: 16px; padding-block: 40px 56px; display: grid; gap: 28px; }
+h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+h1 span { font-family: var(--mono); font-weight: 500; color: var(--accent); }
+.lede { margin: 6px 0 0; color: var(--muted); max-width: 65ch; }
+section { display: grid; gap: 10px; }
+h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0; }
+.wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; }
+th, td { padding: 9px 12px; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+th { font-size: 12px; font-weight: 600; color: var(--muted); }
+th small { display: block; font-weight: 400; }
+th:nth-child(2), td:nth-child(2) { text-align: left; }
+td { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+td.model { font-family: var(--sans); font-size: 14px; }
+td.rank { color: var(--muted); width: 1%; }
+td.score { font-weight: 500; color: var(--accent); }
+.bar { display: block; height: 3px; margin-top: 4px; background: var(--bar); border-radius: 2px; }
+.bar i { display: block; height: 100%; background: var(--accent); border-radius: 2px; }
+footer { color: var(--muted); font-size: 13px; }
+tr.dim td { color: var(--muted); }
+.note { display: block; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<main>
+<header><h1>ZIP Code Bench <span>#####</span></h1>
+<p class="lede">Each model gets a real US street address from the National Address Database and has to name its 5-digit ZIP code from memory. One fresh request per address, no tools, no web search.</p></header>
+<section><h2>40 per tier, seed 7 &middot; 120 addresses</h2>
+<div class="wrap"><table>
+<thead><tr><th>#</th><th>Model</th><th>Exact ZIP</th><th>easy<small>town has 1 ZIP</small></th><th>medium<small>city has 2-9 ZIPs</small></th><th>hard<small>city has 10+ ZIPs</small></th><th>First 3<small>digits right</small></th><th>Cost</th></tr></thead><tbody>
+<tr><td class="rank">1</td><td class="model">openai/gpt-6.1-sol</td><td class="score">84.2%<span class="bar"><i style="width:84.2%"></i></span></td><td>100.0%</td><td>82.5%</td><td>70.0%</td><td>100.0%</td><td>$0.119</td></tr>
+<tr><td class="rank">2</td><td class="model">google/gemini-3.8-flash</td><td class="score">84.2%<span class="bar"><i style="width:84.2%"></i></span></td><td>92.5%</td><td>90.0%</td><td>70.0%</td><td>99.2%</td><td>$0.217</td></tr>
+<tr><td class="rank">3</td><td class="model">openai/gpt-6-luna</td><td class="score">75.0%<span class="bar"><i style="width:75.0%"></i></span></td><td>95.0%</td><td>85.0%</td><td>45.0%</td><td>99.2%</td><td>$0.012</td></tr>
+<tr><td class="rank">4</td><td class="model">google/gemini-3.1-flash-lite</td><td class="score">71.7%<span class="bar"><i style="width:71.7%"></i></span></td><td>95.0%</td><td>75.0%</td><td>45.0%</td><td>99.2%</td><td>$0.003</td></tr>
+<tr><td class="rank">5</td><td class="model">deepseek/deepseek-v4.1-flash</td><td class="score">69.2%<span class="bar"><i style="width:69.2%"></i></span></td><td>90.0%</td><td>80.0%</td><td>37.5%</td><td>95.0%</td><td>$0.189</td></tr>
+<tr><td class="rank">6</td><td class="model">qwen/qwen3.8-max-0902</td><td class="score">67.5%<span class="bar"><i style="width:67.5%"></i></span></td><td>92.5%</td><td>80.0%</td><td>30.0%</td><td>96.7%</td><td>$1.597</td></tr>
+<tr><td class="rank">7</td><td class="model">x-ai/grok-4.7</td><td class="score">66.7%<span class="bar"><i style="width:66.7%"></i></span></td><td>95.0%</td><td>67.5%</td><td>37.5%</td><td>96.7%</td><td>$0.331</td></tr>
+<tr><td class="rank">8</td><td class="model">anthropic/claude-sonnet-5.5</td><td class="score">65.0%<span class="bar"><i style="width:65.0%"></i></span></td><td>92.5%</td><td>67.5%</td><td>35.0%</td><td>98.3%</td><td>$0.222</td></tr>
+<tr><td class="rank">9</td><td class="model">z-ai/glm-5.3</td><td class="score">60.8%<span class="bar"><i style="width:60.8%"></i></span></td><td>85.0%</td><td>70.0%</td><td>27.5%</td><td>96.7%</td><td>$0.413</td></tr>
+<tr><td class="rank">10</td><td class="model">mistralai/mistral-small-2603</td><td class="score">57.5%<span class="bar"><i style="width:57.5%"></i></span></td><td>85.0%</td><td>72.5%</td><td>15.0%</td><td>97.5%</td><td>$0.002</td></tr>
+<tr><td class="rank">11</td><td class="model">z-ai/glm-5.3-flash</td><td class="score">55.8%<span class="bar"><i style="width:55.8%"></i></span></td><td>90.0%</td><td>65.0%</td><td>12.5%</td><td>93.3%</td><td>$0.035</td></tr>
+<tr><td class="rank">12</td><td class="model">anthropic/claude-haiku-4.5</td><td class="score">55.0%<span class="bar"><i style="width:55.0%"></i></span></td><td>77.5%</td><td>60.0%</td><td>27.5%</td><td>92.5%</td><td>$0.013</td></tr>
+<tr><td class="rank">13</td><td class="model">openai/gpt-5.4-nano</td><td class="score">54.2%<span class="bar"><i style="width:54.2%"></i></span></td><td>72.5%</td><td>70.0%</td><td>20.0%</td><td>90.8%</td><td>$0.002</td></tr>
+<tr><td class="rank">14</td><td class="model">qwen/qwen3.8-flash</td><td class="score">50.0%<span class="bar"><i style="width:50.0%"></i></span></td><td>72.5%</td><td>60.0%</td><td>17.5%</td><td>93.3%</td><td>$0.096</td></tr>
+<tr><td class="rank">15</td><td class="model">google/gemma-4-31b-it</td><td class="score">20.8%<span class="bar"><i style="width:20.8%"></i></span></td><td>17.5%</td><td>35.0%</td><td>10.0%</td><td>81.7%</td><td>$0.003</td></tr>
+<tr class=dim><td class="rank">–</td><td class="model">deepseek/deepseek-v4-pro-0813 <span class="note">incomplete: 40 of 120 requests failed</span></td><td class="score">51.7%<span class="bar"><i style="width:51.7%"></i></span></td><td>82.5%</td><td>60.0%</td><td>12.5%</td><td>65.0%</td><td>$0.172</td></tr>
+<tr class=dim><td class="rank">–</td><td class="model">google/gemini-3.1-pro-preview <span class="note">incomplete: 77 of 120 requests failed</span></td><td class="score">32.5%<span class="bar"><i style="width:32.5%"></i></span></td><td>70.0%</td><td>5.0%</td><td>22.5%</td><td>35.0%</td><td>$0.326</td></tr>
+<tr class=dim><td class="rank">–</td><td class="model">mistralai/mistral-medium-3-5 <span class="note">incomplete: 86 of 120 requests failed</span></td><td class="score">20.8%<span class="bar"><i style="width:20.8%"></i></span></td><td>37.5%</td><td>17.5%</td><td>7.5%</td><td>28.3%</td><td>$0.005</td></tr>
+<tr class=dim><td class="rank">–</td><td class="model">moonshotai/kimi-k3 <span class="note">incomplete: 113 of 120 requests failed</span></td><td class="score">5.0%<span class="bar"><i style="width:5.0%"></i></span></td><td>15.0%</td><td>0.0%</td><td>0.0%</td><td>5.8%</td><td>$0.037</td></tr>
+</tbody></table></div></section>
+<section><h2>40 random, seed 42 &middot; 40 addresses</h2>
+<div class="wrap"><table>
+<thead><tr><th>#</th><th>Model</th><th>Exact ZIP</th><th>easy<small>town has 1 ZIP</small></th><th>medium<small>city has 2-9 ZIPs</small></th><th>hard<small>city has 10+ ZIPs</small></th><th>First 3<small>digits right</small></th><th>Cost</th></tr></thead><tbody>
+<tr><td class="rank">1</td><td class="model">google/gemini-3.8-flash</td><td class="score">87.5%<span class="bar"><i style="width:87.5%"></i></span></td><td>100.0%</td><td>84.6%</td><td>66.7%</td><td>100.0%</td><td>$0.068</td></tr>
+<tr><td class="rank">2</td><td class="model">google/gemini-3.1-flash-lite</td><td class="score">87.5%<span class="bar"><i style="width:87.5%"></i></span></td><td>100.0%</td><td>92.3%</td><td>55.6%</td><td>100.0%</td><td>$0.001</td></tr>
+<tr><td class="rank">3</td><td class="model">openai/gpt-6-luna</td><td class="score">75.0%<span class="bar"><i style="width:75.0%"></i></span></td><td>100.0%</td><td>76.9%</td><td>22.2%</td><td>100.0%</td><td>$0.003</td></tr>
+<tr><td class="rank">4</td><td class="model">deepseek/deepseek-v4.1-flash</td><td class="score">75.0%<span class="bar"><i style="width:75.0%"></i></span></td><td>100.0%</td><td>76.9%</td><td>22.2%</td><td>95.0%</td><td>$0.048</td></tr>
+<tr><td class="rank">5</td><td class="model">mistralai/mistral-small-2603</td><td class="score">67.5%<span class="bar"><i style="width:67.5%"></i></span></td><td>94.4%</td><td>69.2%</td><td>11.1%</td><td>100.0%</td><td>$0.001</td></tr>
+<tr><td class="rank">6</td><td class="model">anthropic/claude-haiku-4.5</td><td class="score">65.0%<span class="bar"><i style="width:65.0%"></i></span></td><td>88.9%</td><td>76.9%</td><td>0.0%</td><td>95.0%</td><td>$0.004</td></tr>
+<tr><td class="rank">7</td><td class="model">z-ai/glm-5.3-flash</td><td class="score">62.5%<span class="bar"><i style="width:62.5%"></i></span></td><td>100.0%</td><td>53.8%</td><td>0.0%</td><td>100.0%</td><td>$0.007</td></tr>
+<tr><td class="rank">8</td><td class="model">qwen/qwen3.8-flash</td><td class="score">57.5%<span class="bar"><i style="width:57.5%"></i></span></td><td>72.2%</td><td>69.2%</td><td>11.1%</td><td>95.0%</td><td>$0.019</td></tr>
+<tr><td class="rank">9</td><td class="model">openai/gpt-5.4-nano</td><td class="score">57.5%<span class="bar"><i style="width:57.5%"></i></span></td><td>72.2%</td><td>61.5%</td><td>22.2%</td><td>87.5%</td><td>$0.001</td></tr>
+<tr><td class="rank">10</td><td class="model">google/gemma-4-31b-it</td><td class="score">25.0%<span class="bar"><i style="width:25.0%"></i></span></td><td>22.2%</td><td>38.5%</td><td>11.1%</td><td>82.5%</td><td>$0.001</td></tr>
+</tbody></table></div></section>
+<footer>Updated 2026-10-05 15:43. Addresses cover the 39 states in the National Address Database; California, Georgia, Michigan and a few others are not included. Scores are about &plusmn;9 points overall and &plusmn;15 per tier at 95% confidence.<br>Data: USDOT National Address Database (public domain) via Overture Maps; ZIP table from GeoNames (CC BY 4.0).</footer></main>
+</body>
+</html>

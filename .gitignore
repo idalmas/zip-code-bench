@@ -1,0 +1,11 @@
+# Local environment
+.venv/
+__pycache__/
+.env
+
+# Downloaded / generated inputs (rebuild with `uv run build_dataset.py`)
+cache/
+data/
+
+# Raw terminal output from runs; results/summary.csv and results/runs/ are the record
+results/*.log

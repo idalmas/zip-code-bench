@@ -1,0 +1,6 @@
+[project]
+name = "zip-code-bench"
+version = "0.1.0"
+description = "Can an LLM name the ZIP code of a US street address from memory alone?"
+requires-python = ">=3.10"
+dependencies = ["certifi", "openai>=1.50", "pyarrow>=17", "python-dotenv>=1.0"]
